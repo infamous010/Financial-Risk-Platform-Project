@@ -1,6 +1,7 @@
 from ingestion.ingest_transactions import ingest_all_files
 from warehouse.load_to_sqlite import load_dataframe_to_sqlite
 from transformations.build_analytics_tables import create_market_summary, create_sector_performance, create_top_movers, create_risk_metrics
+from ml_models.anomaly_detection import run_anomaly_detection
 
 
 def main():
@@ -15,6 +16,7 @@ def main():
     create_sector_performance()
     create_top_movers()
     create_risk_metrics()
+    run_anomaly_detection()
 
 
 if __name__ == "__main__":

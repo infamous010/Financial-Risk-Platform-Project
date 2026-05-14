@@ -15,7 +15,7 @@ The platform currently supports:
 - Risk scoring and volatility monitoring
 - Interactive Streamlit dashboarding
 
-Check out the app on -> https://financial-risk-platform-project.streamlit.app/
+Check out the app on -> https://infamous010-financial-risk-platform-project.streamlit.app/
 
 ---
 

@@ -1,6 +1,6 @@
 from ingestion.ingest_transactions import ingest_all_files
 from warehouse.load_to_sqlite import load_dataframe_to_sqlite
-from transformations.build_analytics_tables import create_market_summary
+from transformations.build_analytics_tables import create_market_summary, create_sector_performance, create_top_movers, create_risk_metrics
 
 
 def main():
@@ -12,6 +12,9 @@ def main():
         load_dataframe_to_sqlite(df, table_name)
 
     create_market_summary()
+    create_sector_performance()
+    create_top_movers()
+    create_risk_metrics()
 
 
 if __name__ == "__main__":

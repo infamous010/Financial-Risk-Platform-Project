@@ -56,12 +56,15 @@ st.sidebar.header("Filters")
 selected_risk = st.sidebar.multiselect(
     "Select Risk Level",
     options=risk_metrics["risk_level"].unique(),
-    default=risk_metrics["risk_level"].unique()
+    default=list(risk_metrics["risk_level"].unique())
 )
 
-filtered_risk = risk_metrics[
-    risk_metrics["risk_level"].isin(selected_risk)
-]
+if selected_risk:
+    filtered_risk = risk_metrics[
+        risk_metrics["risk_level"].isin(selected_risk)
+    ]
+else:
+    filtered_risk = risk_metrics.copy()
 
 # -------------------------------
 # KPI SECTION

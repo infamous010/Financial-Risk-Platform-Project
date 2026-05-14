@@ -147,18 +147,24 @@ File:
 # Current Project Structure
 
 financial-risk-monitoring-platform/
-
+│
 ├── data/
 │   ├── raw/
 │   ├── processed/
 │   └── curated/
 │
 ├── ingestion/
+│
 ├── transformations/
+│
 ├── warehouse/
+│
 ├── dashboard/
+│
 ├── notebooks/
+│
 ├── docs/
+│
 ├── tests/
 │
 ├── main.py

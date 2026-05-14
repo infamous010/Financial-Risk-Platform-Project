@@ -6,16 +6,17 @@ import streamlit as st
 # -----------------------------------
 
 st.set_page_config(
-    page_title="Risk Report Generator",
+    page_title="AI Risk Report Generator",
     layout="wide"
 )
 
-st.title("Financial Risk Report Generator")
+st.title("AI-Assisted Financial Risk Intelligence Engine")
 
 st.markdown(
     """
-    Generate structured financial risk intelligence reports
-    using market movement and volatility indicators.
+    Generate intelligent financial risk reports using
+    market movement behaviour, volatility indicators,
+    and anomaly-aware financial intelligence logic.
     """
 )
 
@@ -36,33 +37,20 @@ with col1:
         "Company Name"
     )
 
-    current_price = st.number_input(
-        "Current Stock Price",
+    previous_price = st.number_input(
+        "Previous Closing Price",
         min_value=0.0,
         value=1000.0
     )
 
-    percentage_change = st.number_input(
-        "Percentage Change (%)",
-        value=0.0
-    )
-
-    volatility_score = st.number_input(
-        "Volatility Score",
-        value=0.0
+    current_price = st.number_input(
+        "Current Stock Price",
+        min_value=0.0,
+        value=1050.0
     )
 
 # RIGHT COLUMN
 with col2:
-
-    risk_level = st.selectbox(
-        "Risk Level",
-        [
-            "Low Risk",
-            "Medium Risk",
-            "High Risk"
-        ]
-    )
 
     industry = st.text_input(
         "Industry"
@@ -76,9 +64,8 @@ with col2:
         "Peer Comparison Observation"
     )
 
-# Full width section
 analyst_notes = st.text_area(
-    "Analyst Notes"
+    "Additional Analyst Notes"
 )
 
 st.divider()
@@ -87,58 +74,175 @@ st.divider()
 # REPORT GENERATION
 # -----------------------------------
 
-if st.button("Generate Risk Report"):
+if st.button("Generate AI Risk Report"):
+
+    # -----------------------------------
+    # AUTO CALCULATE PERCENTAGE CHANGE
+    # -----------------------------------
+
+    if previous_price == 0:
+
+        percentage_change = 0
+
+    else:
+
+        percentage_change = (
+            (
+                current_price - previous_price
+            )
+            /
+            previous_price
+        ) * 100
+
+    percentage_change = round(
+        percentage_change,
+        2
+    )
+
+    # -----------------------------------
+    # VOLATILITY SCORE
+    # -----------------------------------
+
+    volatility_score = abs(
+        percentage_change
+    )
+
+    # -----------------------------------
+    # RISK CLASSIFICATION
+    # -----------------------------------
+
+    if volatility_score < 1.5:
+
+        risk_level = "Low Risk"
+
+    elif volatility_score < 3:
+
+        risk_level = "Medium Risk"
+
+    else:
+
+        risk_level = "High Risk"
+
+    # -----------------------------------
+    # VOLATILITY INTERPRETATION
+    # -----------------------------------
+
+    if volatility_score < 1:
+
+        volatility_interpretation = (
+            "Low Volatility"
+        )
+
+    elif volatility_score < 2:
+
+        volatility_interpretation = (
+            "Moderate Volatility"
+        )
+
+    elif volatility_score < 4:
+
+        volatility_interpretation = (
+            "Elevated Volatility"
+        )
+
+    else:
+
+        volatility_interpretation = (
+            "Extreme Volatility"
+        )
+
+    # -----------------------------------
+    # MONITORING PRIORITY
+    # -----------------------------------
+
+    if volatility_score >= 4:
+
+        monitoring_priority = (
+            "Immediate Attention Required"
+        )
+
+    elif volatility_score >= 2:
+
+        monitoring_priority = (
+            "Enhanced Monitoring Recommended"
+        )
+
+    else:
+
+        monitoring_priority = (
+            "Routine Monitoring"
+        )
 
     # -----------------------------------
     # EXECUTIVE SUMMARY
     # -----------------------------------
 
     executive_summary = f"""
-    {company_name} currently exhibits a percentage movement of
-    {percentage_change}% with a volatility score of
-    {volatility_score}.
+    {company_name} currently exhibits a percentage
+    movement of {percentage_change}% based on the
+    observed movement between the previous closing
+    price and current market price.
 
     The company operates within the {industry} sector
-    and is currently categorized as {risk_level}.
+    and currently demonstrates
+    {volatility_interpretation.lower()} characteristics.
+
+    Current market intelligence indicators classify
+    the company as {risk_level}.
     """
 
     # -----------------------------------
-    # RISK ASSESSMENT
+    # ANALYST COMMENTARY
     # -----------------------------------
 
     if risk_level == "High Risk":
 
-        risk_assessment = (
-            "The company demonstrates elevated market risk "
-            "characteristics driven by abnormal movement "
-            "patterns and heightened volatility indicators."
+        analyst_commentary = (
+            "The company demonstrates elevated market "
+            "risk characteristics driven by significant "
+            "price movement behaviour and abnormal "
+            "volatility indicators. Current observations "
+            "suggest increased short-term uncertainty "
+            "relative to stable market conditions."
         )
 
     elif risk_level == "Medium Risk":
 
-        risk_assessment = (
-            "The company demonstrates moderate market risk "
-            "with observable volatility fluctuations that "
-            "require periodic monitoring."
+        analyst_commentary = (
+            "The company demonstrates moderate market "
+            "risk with observable volatility fluctuations "
+            "requiring continued monitoring and periodic "
+            "market review."
         )
 
     else:
 
-        risk_assessment = (
+        analyst_commentary = (
             "The company currently demonstrates relatively "
-            "stable market behaviour with lower volatility exposure."
+            "stable market behaviour with controlled "
+            "volatility exposure and lower short-term "
+            "risk indicators."
         )
 
     # -----------------------------------
     # MONITORING RECOMMENDATION
     # -----------------------------------
 
-    if volatility_score >= 3:
+    if risk_level == "High Risk":
 
         recommendation = (
-            "Enhanced short-term monitoring is recommended "
-            "due to elevated volatility indicators and "
-            "potential abnormal movement behaviour."
+            "Enhanced monitoring procedures are strongly "
+            "recommended due to elevated volatility "
+            "behaviour and abnormal market movement "
+            "characteristics."
+        )
+
+    elif risk_level == "Medium Risk":
+
+        recommendation = (
+            "Periodic monitoring and volatility tracking "
+            "are recommended to identify potential changes "
+            "in market behaviour."
         )
 
     else:
@@ -152,21 +256,41 @@ if st.button("Generate Risk Report"):
     # REPORT OUTPUT
     # -----------------------------------
 
-    st.header("Generated Financial Risk Report")
+    st.header("Generated Financial Intelligence Report")
+
+    st.subheader("Automated Risk Metrics")
+
+    st.write(
+        f"Percentage Change: {percentage_change}%"
+    )
+
+    st.write(
+        f"Volatility Score: {volatility_score}"
+    )
+
+    st.write(
+        f"Volatility Interpretation: {volatility_interpretation}"
+    )
+
+    st.write(
+        f"Risk Classification: {risk_level}"
+    )
+
+    st.write(
+        f"Monitoring Priority: {monitoring_priority}"
+    )
+
+    st.divider()
 
     st.subheader("Executive Summary")
 
     st.write(executive_summary)
 
-    st.subheader("Risk Assessment")
+    st.subheader("AI-Generated Analyst Commentary")
 
-    st.write(risk_assessment)
+    st.write(analyst_commentary)
 
     st.subheader("Market Behaviour Analysis")
-
-    st.write(
-        f"Current Stock Price: {current_price}"
-    )
 
     st.write(
         f"Trading Volume Observation: {trading_volume}"
@@ -177,7 +301,7 @@ if st.button("Generate Risk Report"):
     )
 
     st.write(
-        f"Analyst Notes: {analyst_notes}"
+        f"Additional Analyst Notes: {analyst_notes}"
     )
 
     st.subheader("Monitoring Recommendation")
@@ -185,5 +309,5 @@ if st.button("Generate Risk Report"):
     st.write(recommendation)
 
     st.success(
-        "Risk report generated successfully."
+        "AI-assisted financial risk report generated successfully."
     )

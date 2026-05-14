@@ -2,66 +2,69 @@
 
 ## Project Overview
 
-This project is an enterprise-style financial analytics and risk monitoring platform built using Python, SQLite, and modular ETL architecture principles.
+An enterprise-style financial analytics and risk monitoring platform built using Python, SQLite, Streamlit, and modular ETL architecture principles.
 
-The goal of the project is to simulate how financial institutions and analytics teams ingest, transform, warehouse, and analyze large-scale financial datasets for reporting and business intelligence purposes.
+This project simulates how modern financial analytics and risk teams ingest, transform, warehouse, analyze, and monitor financial market data using layered data engineering and analytics workflows.
 
-The current phase focuses on:
-- Multi-source data ingestion
-- Data cleaning and transformation
-- Warehouse creation using SQLite
-- Analytics-ready data modelling
+The platform currently supports:
+- Multi-source financial data ingestion
+- Automated ETL pipelines
+- Data transformation and cleaning
+- SQLite warehouse architecture
+- Analytics-ready business tables
+- Risk scoring and volatility monitoring
+- Interactive Streamlit dashboarding
 
-Future phases will expand into:
-- Risk scoring
-- Machine learning pipelines
-- AI-generated financial insights
-- Dashboarding and monitoring systems
+Check out the app on -> https://financial-risk-platform-project.streamlit.app/
 
 ---
 
 # Business Problem
 
-Financial institutions work with large volumes of fragmented financial data originating from:
+Financial institutions and analytics teams work with fragmented financial datasets originating from:
 - market feeds
-- company statements
-- transaction systems
-- news sources
-- peer comparison datasets
+- company master data
+- peer comparison systems
+- financial reporting systems
+- corporate news sources
 
 These datasets are often:
 - inconsistent
 - duplicated
-- poorly formatted
+- semi-structured
 - difficult to analyze directly
 
-This project aims to build a scalable pipeline that transforms raw financial datasets into structured analytics-ready warehouse tables.
+This project aims to simulate an enterprise financial monitoring workflow by transforming raw financial datasets into structured analytics-ready business intelligence models.
 
 ---
 
-# Current Project Architecture
+# Current Architecture
 
-Raw CSV Files
+Raw Financial CSV Files
 ↓
 Python Ingestion Pipeline
 ↓
-Cleaning & Transformation Layer
+Transformation & Cleaning Layer
 ↓
 SQLite Warehouse
 ↓
-Analytics Tables
+Analytics Models
+↓
+Risk Intelligence Layer
+↓
+Interactive Streamlit Dashboard
 
 ---
 
 # Dataset Used
 
-The project currently uses a multi-source Indian financial markets dataset containing:
-- company master data
-- stock quote information
-- corporate news data
-- peer comparison metrics
+The platform currently integrates multiple financial market datasets containing:
+- company information
+- stock quote metrics
+- peer comparisons
+- corporate news feeds
 
-Files currently integrated:
+Integrated datasets:
 - active_companies_list.csv
 - quote_data.csv
 - corporate_news_data.csv
@@ -73,13 +76,13 @@ Files currently integrated:
 
 ## 1. Multi-Source Data Ingestion
 
-Built reusable ingestion pipelines to load multiple financial datasets dynamically using Python and Pandas.
+Built modular ingestion pipelines to dynamically load multiple financial datasets using Python and Pandas.
 
 Implemented:
 - automated CSV loading
+- reusable ingestion functions
+- validation previews
 - error handling
-- modular ingestion logic
-- dataset previews for validation
 
 File:
 - ingestion/ingest_transactions.py
@@ -88,13 +91,13 @@ File:
 
 ## 2. Transformation & Cleaning Layer
 
-Created reusable transformation functions to standardize incoming datasets before warehouse loading.
+Created reusable transformation pipelines for standardizing raw financial datasets before warehouse loading.
 
 Implemented:
 - column standardization
 - duplicate removal
 - unnamed column cleanup
-- schema consistency improvements
+- schema normalization
 
 File:
 - transformations/clean_transactions.py
@@ -103,13 +106,12 @@ File:
 
 ## 3. SQLite Warehouse Layer
 
-Built a local SQLite warehouse to persist transformed financial datasets.
+Built a local warehouse architecture using SQLite to persist transformed datasets.
 
 Implemented:
 - automated table creation
-- warehouse loading functions
+- reusable warehouse loading functions
 - persistent structured storage
-- modular database connection handling
 
 File:
 - warehouse/load_to_sqlite.py
@@ -118,18 +120,57 @@ File:
 
 ## 4. Analytics Modelling Layer
 
-Created the first analytics-ready business table:
-- market_summary
+Created analytics-ready business intelligence tables for downstream reporting and dashboarding.
 
-This layer merges multiple warehouse tables to generate structured business intelligence datasets for downstream analytics.
+Current analytics tables:
+- market_summary
+- sector_performance
+- top_gainers
+- top_losers
 
 Implemented:
 - warehouse joins
-- schema conflict handling
-- curated analytics modelling
+- aggregation pipelines
+- KPI modelling
+- business intelligence summaries
 
 File:
 - transformations/build_analytics_tables.py
+
+---
+
+## 5. Risk Intelligence Layer
+
+Built a volatility-based financial risk scoring system for identifying high-risk companies based on abnormal market movement patterns.
+
+Implemented:
+- volatility score calculation
+- risk categorization
+- risk analytics modelling
+
+Generated table:
+- risk_metrics
+
+---
+
+## 6. Interactive Dashboard Layer
+
+Built an interactive Streamlit dashboard for monitoring:
+- market KPIs
+- sector performance
+- top movers
+- risk metrics
+- volatility insights
+
+Implemented:
+- KPI cards
+- interactive charts
+- risk filters
+- analytics tables
+- risk monitoring interface
+
+File:
+- dashboard/app.py
 
 ---
 
@@ -138,9 +179,11 @@ File:
 - Python
 - Pandas
 - SQLite
-- VS Code
-- Git
+- Streamlit
+- Plotly
 - SQL
+- Git
+- VS Code
 
 ---
 
@@ -154,17 +197,11 @@ financial-risk-monitoring-platform/
 │   └── curated/
 │
 ├── ingestion/
-│
 ├── transformations/
-│
 ├── warehouse/
-│
 ├── dashboard/
-│
 ├── notebooks/
-│
 ├── docs/
-│
 ├── tests/
 │
 ├── main.py
@@ -182,35 +219,47 @@ venv\Scripts\activate
 
 ---
 
-## Run Pipeline
+## Run ETL Pipeline
 
 python main.py
 
 ---
 
+## Launch Dashboard
+
+streamlit run dashboard/app.py
+
+---
+
 # Current Output
 
-The pipeline currently:
-- ingests multiple raw financial datasets
-- transforms and standardizes them
-- stores them in SQLite warehouse tables
-- creates analytics-ready market summary tables
+The platform currently:
+- ingests raw financial datasets
+- transforms and standardizes data
+- stores structured warehouse tables
+- builds analytics-ready business models
+- generates volatility-based risk metrics
+- visualizes insights through an interactive dashboard
 
-Generated warehouse tables:
+Generated warehouse & analytics tables:
 - companies
 - quotes
 - news
 - peer_comparisons
 - market_summary
+- sector_performance
+- top_gainers
+- top_losers
+- risk_metrics
 
 ---
 
-# Next Planned Improvements
+# Future Enhancements
 
 Upcoming phases will include:
-- advanced analytics tables
-- anomaly detection
-- financial risk scoring
-- machine learning pipelines
+- anomaly detection pipelines
+- machine learning risk models
 - AI-generated financial summaries
-- interactive dashboards
+- NLP-based news sentiment analysis
+- predictive analytics
+- cloud deployment architecture

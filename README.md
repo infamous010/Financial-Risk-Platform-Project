@@ -1,265 +1,163 @@
-# Financial Risk Monitoring Platform
+# FinSight — AI-Powered Financial Risk Intelligence Platform
 
-## Project Overview
+An end-to-end, cloud-native BFSI financial intelligence platform integrating data engineering, ML-based risk monitoring, and LLM-powered narrative generation — built to simulate enterprise-grade financial analytics workflows.
 
-An enterprise-style financial analytics and risk monitoring platform built using Python, SQLite, Streamlit, and modular ETL architecture principles.
-
-This project simulates how modern financial analytics and risk teams ingest, transform, warehouse, analyze, and monitor financial market data using layered data engineering and analytics workflows.
-
-The platform currently supports:
-- Multi-source financial data ingestion
-- Automated ETL pipelines
-- Data transformation and cleaning
-- SQLite warehouse architecture
-- Analytics-ready business tables
-- Risk scoring and volatility monitoring
-- Interactive Streamlit dashboarding
-
-Check out the app on -> https://infamous010-financial-risk-platform-project.streamlit.app/
+**Live App →** https://infamous010-financial-risk-platform-project.streamlit.app/
 
 ---
 
-# Business Problem
+## What It Does
 
-Financial institutions and analytics teams work with fragmented financial datasets originating from:
-- market feeds
-- company master data
-- peer comparison systems
-- financial reporting systems
-- corporate news sources
-
-These datasets are often:
-- inconsistent
-- duplicated
-- semi-structured
-- difficult to analyze directly
-
-This project aims to simulate an enterprise financial monitoring workflow by transforming raw financial datasets into structured analytics-ready business intelligence models.
+FinSight ingests multi-source financial market datasets, transforms and warehouses them in a cloud PostgreSQL database, runs ML-based anomaly detection, and generates institutional-style risk narratives using a locally hosted LLM — all surfaced through a multi-page enterprise dashboard.
 
 ---
 
-# Current Architecture
+## Architecture
 
-Raw Financial CSV Files
-↓
-Python Ingestion Pipeline
-↓
-Transformation & Cleaning Layer
-↓
-SQLite Warehouse
-↓
-Analytics Models
-↓
-Risk Intelligence Layer
-↓
-Interactive Streamlit Dashboard
-
----
-
-# Dataset Used
-
-The platform currently integrates multiple financial market datasets containing:
-- company information
-- stock quote metrics
-- peer comparisons
-- corporate news feeds
-
-Integrated datasets:
-- active_companies_list.csv
-- quote_data.csv
-- corporate_news_data.csv
-- peers_comparisons_data.csv
+```
+Multi-Source Financial CSVs
+        ↓
+Python Ingestion Layer (ingestion/)
+        ↓
+Transformation & Cleaning Layer (transformations/)
+        ↓
+Cloud PostgreSQL Warehouse — Supabase (warehouse/)
+        ↓
+Analytics & Risk Intelligence Layer (backend/)
+        ↓
+ML Anomaly Detection Layer (ml_models/)
+        ↓
+AI Narrative Engine — Ollama + Gemma (ai_engine/)
+        ↓
+Multi-Page Streamlit Dashboard (dashboard/)
+```
 
 ---
 
-# Current Features
+## Tech Stack
 
-## 1. Multi-Source Data Ingestion
-
-Built modular ingestion pipelines to dynamically load multiple financial datasets using Python and Pandas.
-
-Implemented:
-- automated CSV loading
-- reusable ingestion functions
-- validation previews
-- error handling
-
-File:
-- ingestion/ingest_transactions.py
+| Layer | Tools |
+|---|---|
+| Data Engineering | Python, Pandas, SQLAlchemy |
+| Warehouse | PostgreSQL (Supabase) |
+| ML / Risk | Scikit-learn, Isolation Forest |
+| AI / LLM | Ollama, Gemma |
+| Dashboard | Streamlit, Plotly |
+| Deployment | Streamlit Cloud, Supabase, Environment-based secret management |
 
 ---
 
-## 2. Transformation & Cleaning Layer
+## Features
 
-Created reusable transformation pipelines for standardizing raw financial datasets before warehouse loading.
+### 1. Modular ETL Pipeline
+Reusable ingestion and transformation pipelines handling multi-source financial datasets — automating cleaning, schema normalization, and warehouse loading across:
+- `active_companies_list.csv`
+- `quote_data.csv`
+- `corporate_news_data.csv`
+- `peers_comparisons_data.csv`
 
-Implemented:
-- column standardization
-- duplicate removal
-- unnamed column cleanup
-- schema normalization
+### 2. Cloud PostgreSQL Warehouse
+Analytics-ready warehouse tables built on Supabase PostgreSQL via SQLAlchemy ORM:
+- `companies`, `quotes`, `news`, `peer_comparisons`
+- `market_summary`, `sector_performance`, `top_gainers`, `top_losers`
+- `risk_metrics`, `anomaly_scores`
 
-File:
-- transformations/clean_transactions.py
+### 3. Risk Intelligence Layer
+Volatility-based risk scoring and classification system identifying high-risk market behaviour across sectors — generating structured `risk_metrics` for downstream monitoring.
 
----
+### 4. ML Anomaly Detection
+Isolation Forest model identifying statistically abnormal market movement patterns — dynamically surfacing anomalies across the dashboard with confidence scoring.
 
-## 3. SQLite Warehouse Layer
+### 5. AI Narrative Engine
+Locally hosted LLM (Ollama + Gemma) with a custom prompt engineering layer generating:
+- Institutional-style market intelligence commentary
+- Anomaly investigation summaries
+- Risk monitoring narratives
 
-Built a local warehouse architecture using SQLite to persist transformed datasets.
+Output resembles analyst-grade financial intelligence rather than generic chatbot responses.
 
-Implemented:
-- automated table creation
-- reusable warehouse loading functions
-- persistent structured storage
-
-File:
-- warehouse/load_to_sqlite.py
-
----
-
-## 4. Analytics Modelling Layer
-
-Created analytics-ready business intelligence tables for downstream reporting and dashboarding.
-
-Current analytics tables:
-- market_summary
-- sector_performance
-- top_gainers
-- top_losers
-
-Implemented:
-- warehouse joins
-- aggregation pipelines
-- KPI modelling
-- business intelligence summaries
-
-File:
-- transformations/build_analytics_tables.py
+### 6. Multi-Page Enterprise Dashboard
+Interactive Streamlit application with five dedicated views:
+- **Market Analytics** — KPIs, sector performance, top movers
+- **Risk Monitoring** — Volatility scores, risk classification
+- **ML Anomaly Detection** — Isolation Forest outputs, anomaly explorer
+- **Financial Report Generator** — Automated report generation
+- **AI Narrative Intelligence** — LLM-generated market commentary
 
 ---
 
-## 5. Risk Intelligence Layer
+## Project Structure
 
-Built a volatility-based financial risk scoring system for identifying high-risk companies based on abnormal market movement patterns.
-
-Implemented:
-- volatility score calculation
-- risk categorization
-- risk analytics modelling
-
-Generated table:
-- risk_metrics
-
----
-
-## 6. Interactive Dashboard Layer
-
-Built an interactive Streamlit dashboard for monitoring:
-- market KPIs
-- sector performance
-- top movers
-- risk metrics
-- volatility insights
-
-Implemented:
-- KPI cards
-- interactive charts
-- risk filters
-- analytics tables
-- risk monitoring interface
-
-File:
-- dashboard/app.py
-
----
-
-# Technologies Used
-
-- Python
-- Pandas
-- SQLite
-- Streamlit
-- Plotly
-- SQL
-- Git
-- VS Code
-
----
-
-# Current Project Structure
-
-financial-risk-monitoring-platform/
+```
+finsight/
 │
-├── data/
-│   ├── raw/
-│   ├── processed/
-│   └── curated/
+├── ingestion/              # Data ingestion pipelines
+├── transformations/        # Cleaning and analytics table generation
+├── warehouse/              # PostgreSQL warehouse loading (Supabase)
+├── backend/                # Risk intelligence and KPI modelling
+├── ml_models/              # Isolation Forest anomaly detection
+├── ai_engine/              # Ollama + Gemma LLM narrative layer
+├── dashboard/              # Multi-page Streamlit app
+├── data/raw/               # Source financial CSVs
 │
-├── ingestion/
-├── transformations/
-├── warehouse/
-├── dashboard/
-├── notebooks/
-├── docs/
-├── tests/
-│
-├── main.py
+├── main.py                 # ETL orchestration entry point
 ├── requirements.txt
 └── README.md
+```
 
 ---
 
-# How To Run The Project
+## Running Locally
 
-## Activate Virtual Environment
+### Prerequisites
+- Python 3.10+
+- [Ollama](https://ollama.ai) installed with Gemma model pulled (`ollama pull gemma`)
+- Supabase project with connection string (or swap for local PostgreSQL)
 
-Windows:
+### Setup
+
+```bash
+# Clone the repo
+git clone https://github.com/infamous010/Financial-Risk-Platform-Project.git
+cd Financial-Risk-Platform-Project
+
+# Create and activate virtual environment
+python -m venv venv
+# Windows:
 venv\Scripts\activate
+# Mac/Linux:
+source venv/bin/activate
 
----
+# Install dependencies
+pip install -r requirements.txt
 
-## Run ETL Pipeline
+# Add environment variables
+# Create a .env file with your Supabase connection string:
+# DATABASE_URL=postgresql://...
+```
 
+### Run
+
+```bash
+# Run ETL pipeline
 python main.py
 
----
-
-## Launch Dashboard
-
+# Launch dashboard
 streamlit run dashboard/app.py
+```
 
 ---
 
-# Current Output
+## Deployment
 
-The platform currently:
-- ingests raw financial datasets
-- transforms and standardizes data
-- stores structured warehouse tables
-- builds analytics-ready business models
-- generates volatility-based risk metrics
-- visualizes insights through an interactive dashboard
-
-Generated warehouse & analytics tables:
-- companies
-- quotes
-- news
-- peer_comparisons
-- market_summary
-- sector_performance
-- top_gainers
-- top_losers
-- risk_metrics
+- **Dashboard:** Streamlit Cloud
+- **Warehouse:** Supabase PostgreSQL (cloud-hosted)
+- **AI Layer:** Locally hosted (Ollama) — not deployed to cloud
+- **Secrets:** Environment variable-based secret management
 
 ---
 
-# Future Enhancements
+## Author
 
-Upcoming phases will include:
-- anomaly detection pipelines
-- machine learning risk models
-- AI-generated financial summaries
-- NLP-based news sentiment analysis
-- predictive analytics
-- cloud deployment architecture
+**Diya Gupta** — Data Analyst, ETL & BFSI Financial Reporting  
+[LinkedIn](https://linkedin.com) · diya49968@gmail.com

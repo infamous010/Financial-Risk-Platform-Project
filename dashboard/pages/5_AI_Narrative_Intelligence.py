@@ -7,6 +7,41 @@ sys.path.append(
     )
 )
 
+import platform
+import streamlit as st
+
+
+# -----------------------------------
+# CLOUD DEPLOYMENT CHECK
+# -----------------------------------
+
+if platform.system() != "Windows":
+
+    st.set_page_config(
+        page_title="AI Narrative Intelligence",
+        layout="wide"
+    )
+
+    st.title(
+        "AI Narrative Intelligence"
+    )
+
+    st.warning(
+        """
+        AI Narrative Intelligence is available only in the local development environment.
+
+        The deployed cloud version currently supports:
+        - analytics dashboards
+        - risk monitoring
+        - ML anomaly detection
+        - financial report generation
+
+        Local AI inference using Ollama is disabled in cloud deployment.
+        """
+    )
+
+    st.stop()
+
 import streamlit as st
 import pandas as pd
 from backend.database import engine

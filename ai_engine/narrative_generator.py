@@ -1,12 +1,4 @@
 import ollama
-import platform
-
-if platform.system() != "Windows":
-
-    raise Exception(
-        "AI Narrative page only available locally."
-    )
-
 
 SYSTEM_PROMPT = """
 You are a Senior Financial Risk Analyst at an institutional investment surveillance platform.

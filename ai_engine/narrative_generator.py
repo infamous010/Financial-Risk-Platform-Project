@@ -1,4 +1,11 @@
 import ollama
+import platform
+
+if platform.system() != "Windows":
+
+    raise Exception(
+        "AI Narrative page only available locally."
+    )
 
 
 SYSTEM_PROMPT = """

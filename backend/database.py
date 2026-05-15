@@ -1,25 +1,27 @@
-from sqlalchemy import create_engine
-from dotenv import load_dotenv
 import os
 
+from sqlalchemy import create_engine
+from dotenv import load_dotenv
 
-# Load .env variables
+
+# Load local .env
 load_dotenv()
 
-# Fetch variables
-USER = os.getenv("user")
-PASSWORD = os.getenv("password")
-HOST = os.getenv("host")
-PORT = os.getenv("port")
-DBNAME = os.getenv("dbname")
-
-# SQLAlchemy connection string
-DATABASE_URL = (
-    f"postgresql+psycopg2://"
-    f"{USER}:{PASSWORD}@"
-    f"{HOST}:{PORT}/"
-    f"{DBNAME}?sslmode=require"
+# Try local env first
+DATABASE_URL = os.getenv(
+    "SUPABASE_DB_URL"
 )
 
+# Fallback for Streamlit Cloud
+if DATABASE_URL is None:
+
+    import streamlit as st
+
+    DATABASE_URL = st.secrets[
+        "SUPABASE_DB_URL"
+    ]
+
 # Create engine
-engine = create_engine(DATABASE_URL)
+engine = create_engine(
+    DATABASE_URL
+)

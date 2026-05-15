@@ -1,4 +1,4 @@
-import sqlite3
+from backend.database import engine
 import pandas as pd
 from pathlib import Path
 from sklearn.ensemble import IsolationForest
@@ -7,28 +7,16 @@ from sklearn.ensemble import IsolationForest
 DB_PATH = Path("warehouse/risk_platform.db")
 
 
-def create_connection():
-    """
-    Creates SQLite database connection.
-    """
-
-    conn = sqlite3.connect(DB_PATH)
-
-    return conn
-
-
 def run_anomaly_detection():
     """
     Runs Isolation Forest anomaly detection
     on financial risk metrics.
     """
 
-    conn = create_connection()
-
     # Load risk metrics table
     risk_df = pd.read_sql(
         "SELECT * FROM risk_metrics",
-        conn
+        engine
     )
 
     # -----------------------------------
@@ -102,14 +90,14 @@ def run_anomaly_detection():
 
     risk_df.to_sql(
         "anomaly_detection",
-        conn,
+        engine,
         if_exists="replace",
         index=False
     )
 
     print("Created ML table: anomaly_detection")
 
-    conn.close()
+    engine.dispose()
 
 
 if __name__ == "__main__":

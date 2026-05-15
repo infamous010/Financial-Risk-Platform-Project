@@ -15,6 +15,13 @@ def standardize_column_names(df):
         .str.replace(" ", "_")
     )
 
+    # Rename unnamed index column
+    df.columns = [
+        "id" if "unnamed" in col
+        else col
+        for col in df.columns
+    ]
+
     return df
 
 

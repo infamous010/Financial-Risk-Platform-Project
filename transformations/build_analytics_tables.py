@@ -1,24 +1,18 @@
 import pandas as pd
-import sqlite3
+from backend.database import engine
 from pathlib import Path
 
 
 DB_PATH = Path("warehouse/risk_platform.db")
 
 
-def create_connection():
-
-    conn = sqlite3.connect(DB_PATH)
-
-    return conn
-
-
 def create_market_summary():
 
-    conn = create_connection()
-
-    quotes_df = pd.read_sql("SELECT * FROM quotes", conn)
-    companies_df = pd.read_sql("SELECT * FROM companies", conn)
+    quotes_df = pd.read_sql(
+    "SELECT * FROM quotes",
+    engine
+)
+    companies_df = pd.read_sql("SELECT * FROM companies", engine)
 
     # Merge datasets
     merged_df = quotes_df.merge(
@@ -50,21 +44,19 @@ def create_market_summary():
     # Save analytics table
     market_summary.to_sql(
         "market_summary",
-        conn,
+        engine,
         if_exists="replace",
         index=False
     )
 
     print("Created analytics table: market_summary")
 
-    conn.close()
+    engine.dispose()
 
 def create_sector_performance():
 
-    conn = create_connection()
-
-    quotes_df = pd.read_sql("SELECT * FROM quotes", conn)
-    companies_df = pd.read_sql("SELECT * FROM companies", conn)
+    quotes_df = pd.read_sql("SELECT * FROM quotes", engine)
+    companies_df = pd.read_sql("SELECT * FROM companies", engine)
 
     merged_df = quotes_df.merge(
         companies_df,
@@ -94,22 +86,20 @@ def create_sector_performance():
 
     sector_summary.to_sql(
         "sector_performance",
-        conn,
+        engine,
         if_exists="replace",
         index=False
     )
 
     print("Created analytics table: sector_performance")
 
-    conn.close()
+    engine.dispose()
 
 def create_top_movers():
 
-    conn = create_connection()
-
     quotes_df = pd.read_sql(
         "SELECT * FROM quotes",
-        conn
+        engine
     )
 
     # Select relevant columns
@@ -140,14 +130,14 @@ def create_top_movers():
     # Save tables
     top_gainers.to_sql(
         "top_gainers",
-        conn,
+        engine,
         if_exists="replace",
         index=False
     )
 
     top_losers.to_sql(
         "top_losers",
-        conn,
+        engine,
         if_exists="replace",
         index=False
     )
@@ -155,15 +145,13 @@ def create_top_movers():
     print("Created analytics table: top_gainers")
     print("Created analytics table: top_losers")
 
-    conn.close()
+    engine.dispose()
 
 def create_risk_metrics():
 
-    conn = create_connection()
-
     quotes_df = pd.read_sql(
         "SELECT * FROM quotes",
-        conn
+        engine
     )
 
     risk_df = quotes_df[
@@ -196,11 +184,11 @@ def create_risk_metrics():
     # Save analytics table
     risk_df.to_sql(
         "risk_metrics",
-        conn,
+        engine,
         if_exists="replace",
         index=False
     )
 
     print("Created analytics table: risk_metrics")
 
-    conn.close()
+    engine.dispose()

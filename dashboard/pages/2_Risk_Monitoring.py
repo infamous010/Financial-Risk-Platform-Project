@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import sqlite3
+from backend.database import engine
 import plotly.express as px
 from pathlib import Path
 
@@ -10,14 +10,12 @@ DB_PATH = Path("warehouse/risk_platform.db")
 
 def load_table(table_name):
 
-    conn = sqlite3.connect(DB_PATH)
-
     df = pd.read_sql(
         f"SELECT * FROM {table_name}",
-        conn
+        engine
     )
 
-    conn.close()
+    engine.dispose()
 
     return df
 

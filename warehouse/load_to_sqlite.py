@@ -1,18 +1,8 @@
-import sqlite3
+from backend.database import engine
 from pathlib import Path
 
 
 DB_PATH = Path("warehouse/risk_platform.db")
-
-
-def create_connection():
-    """
-    Creates SQLite database connection.
-    """
-
-    conn = sqlite3.connect(DB_PATH)
-
-    return conn
 
 
 def load_dataframe_to_sqlite(df, table_name):
@@ -20,12 +10,10 @@ def load_dataframe_to_sqlite(df, table_name):
     Loads dataframe into SQLite table.
     """
 
-    conn = create_connection()
-
     try:
         df.to_sql(
             table_name,
-            conn,
+            engine,
             if_exists="replace",
             index=False
         )
@@ -36,4 +24,4 @@ def load_dataframe_to_sqlite(df, table_name):
         print(f"Error loading {table_name}: {e}")
 
     finally:
-        conn.close()
+        engine.dispose()

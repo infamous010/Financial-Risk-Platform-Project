@@ -1,12 +1,21 @@
-import streamlit as st
-import pandas as pd
-from backend.database import engine
-import plotly.express as px
+import sys
 from pathlib import Path
 
+# Add project root to Python path
+sys.path.append(
+    str(Path(__file__).resolve().parent.parent.parent)
+)
 
-DB_PATH = Path("warehouse/risk_platform.db")
+import streamlit as st
+import pandas as pd
+import plotly.express as px
 
+from backend.database import engine
+
+
+# -----------------------------------
+# LOAD TABLE FUNCTION
+# -----------------------------------
 
 def load_table(table_name):
 
@@ -14,8 +23,6 @@ def load_table(table_name):
         f"SELECT * FROM {table_name}",
         engine
     )
-
-    engine.dispose()
 
     return df
 
@@ -32,17 +39,33 @@ st.set_page_config(
 st.title("Market Analytics")
 
 st.markdown(
-    "Financial market performance and sector intelligence dashboard."
+    """
+    Financial market performance and
+    sector intelligence dashboard.
+    """
 )
+
 
 # -----------------------------------
 # LOAD TABLES
 # -----------------------------------
 
-market_summary = load_table("market_summary")
-sector_performance = load_table("sector_performance")
-top_gainers = load_table("top_gainers")
-top_losers = load_table("top_losers")
+market_summary = load_table(
+    "market_summary"
+)
+
+sector_performance = load_table(
+    "sector_performance"
+)
+
+live_gainers = load_table(
+    "top_gainers"
+)
+
+live_losers = load_table(
+    "top_losers"
+)
+
 
 # -----------------------------------
 # KPI SECTION
@@ -66,14 +89,17 @@ col2.metric(
 )
 
 col3.metric(
-    "Highest Gainer %",
+    "Highest Live Return %",
     round(
-        top_gainers["pchange"].max(),
+        live_gainers[
+            "daily_return_pct"
+        ].max(),
         2
     )
 )
 
 st.divider()
+
 
 # -----------------------------------
 # CHARTS SECTION
@@ -83,16 +109,23 @@ st.header("Sector Analytics")
 
 chart_col1, chart_col2 = st.columns(2)
 
-# Sector performance chart
+
+# -----------------------------------
+# SECTOR PERFORMANCE CHART
+# -----------------------------------
+
 with chart_col1:
 
     sector_chart = px.bar(
+
         sector_performance.sort_values(
             by="avg_percentage_change",
             ascending=False
         ),
+
         x="industry",
         y="avg_percentage_change",
+
         title="Sector Performance"
     )
 
@@ -101,14 +134,21 @@ with chart_col1:
         use_container_width=True
     )
 
-# Top gainers chart
+
+# -----------------------------------
+# LIVE TOP GAINERS CHART
+# -----------------------------------
+
 with chart_col2:
 
     gainers_chart = px.bar(
-        top_gainers,
-        x="companyname",
-        y="pchange",
-        title="Top Gainers"
+
+        live_gainers,
+
+        x="ticker",
+        y="daily_return_pct",
+
+        title="Live Top Gainers"
     )
 
     st.plotly_chart(
@@ -116,30 +156,66 @@ with chart_col2:
         use_container_width=True
     )
 
+
 st.divider()
 
+
 # -----------------------------------
-# TOP MOVERS TABLES
+# LIVE MARKET MOVERS
 # -----------------------------------
 
-st.header("Top Market Movers")
+st.header(
+    "Live Market Movers"
+)
 
 table_col1, table_col2 = st.columns(2)
 
+
+# -----------------------------------
+# TOP GAINERS TABLE
+# -----------------------------------
+
 with table_col1:
 
-    st.subheader("Top Gainers")
+    st.subheader(
+        "Top Gainers"
+    )
 
     st.dataframe(
-        top_gainers,
+
+        live_gainers[
+            [
+                "ticker",
+                "close",
+                "daily_return_pct",
+                "volume"
+            ]
+        ],
+
         use_container_width=True
     )
 
+
+# -----------------------------------
+# TOP LOSERS TABLE
+# -----------------------------------
+
 with table_col2:
 
-    st.subheader("Top Losers")
+    st.subheader(
+        "Top Losers"
+    )
 
     st.dataframe(
-        top_losers,
+
+        live_losers[
+            [
+                "ticker",
+                "close",
+                "daily_return_pct",
+                "volume"
+            ]
+        ],
+
         use_container_width=True
     )

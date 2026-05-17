@@ -216,3 +216,60 @@ with col2:
             ]
         ]
     )
+
+# -----------------------------------
+# VOLATILITY HEATMAP
+# -----------------------------------
+
+st.divider()
+
+st.header(
+    "Market Risk Heatmap"
+)
+
+
+# -----------------------------------
+# LATEST VOLATILITY SNAPSHOT
+# -----------------------------------
+
+latest_date = analytics_df[
+    "date"
+].max()
+
+
+heatmap_df = analytics_df[
+
+    analytics_df["date"] == latest_date
+
+][
+    [
+        "ticker",
+        "rolling_volatility_30d"
+    ]
+]
+
+
+# -----------------------------------
+# CREATE HEATMAP
+# -----------------------------------
+
+heatmap_fig = px.imshow(
+
+    [heatmap_df[
+        "rolling_volatility_30d"
+    ].values],
+
+    x=heatmap_df["ticker"],
+
+    y=["Volatility"],
+
+    aspect="auto",
+
+    title="30-Day Rolling Volatility Heatmap"
+)
+
+
+st.plotly_chart(
+    heatmap_fig,
+    use_container_width=True
+)

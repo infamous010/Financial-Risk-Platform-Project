@@ -101,6 +101,100 @@ top_losers = (
     .head(5)
 )
 
+# -----------------------------------
+# RISK ALERT ENGINE
+# -----------------------------------
+
+alerts = []
+
+
+for _, row in latest_df.iterrows():
+
+    # -----------------------------
+    # HIGH VOLATILITY ALERT
+    # -----------------------------
+
+    if row["rolling_volatility_30d"] > 3:
+
+        alerts.append({
+
+            "ticker": row["ticker"],
+
+            "alert_type":
+            "High Volatility",
+
+            "alert_message":
+
+            f"{row['ticker']} "
+            f"showing elevated "
+            f"volatility levels.",
+
+            "risk_level": "High"
+        })
+
+
+    # -----------------------------
+    # SHARP PRICE DROP ALERT
+    # -----------------------------
+
+    if row["daily_return_pct"] < -2:
+
+        alerts.append({
+
+            "ticker": row["ticker"],
+
+            "alert_type":
+            "Sharp Downside Movement",
+
+            "alert_message":
+
+            f"{row['ticker']} "
+            f"declined sharply "
+            f"in latest session.",
+
+            "risk_level": "Critical"
+        })
+
+
+    # -----------------------------
+    # ABNORMAL VOLUME ALERT
+    # -----------------------------
+
+    avg_volume = (
+
+        df[
+            df["ticker"] == row["ticker"]
+        ]["volume"]
+
+        .mean()
+    )
+
+
+    if row["volume"] > avg_volume * 1.8:
+
+        alerts.append({
+
+            "ticker": row["ticker"],
+
+            "alert_type":
+            "Abnormal Trading Volume",
+
+            "alert_message":
+
+            f"{row['ticker']} "
+            f"recorded abnormal "
+            f"market activity volume.",
+
+            "risk_level": "Medium"
+        })
+
+
+# -----------------------------------
+# CREATE ALERT DATAFRAME
+# -----------------------------------
+
+alerts_df = pd.DataFrame(alerts)
+
 
 # -----------------------------------
 # SAVE ANALYTICS TABLES
@@ -122,6 +216,13 @@ top_gainers.to_sql(
 
 top_losers.to_sql(
     "top_losers",
+    engine,
+    if_exists="replace",
+    index=False
+)
+
+alerts_df.to_sql(
+    "market_alerts",
     engine,
     if_exists="replace",
     index=False

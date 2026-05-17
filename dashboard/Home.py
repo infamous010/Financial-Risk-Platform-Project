@@ -1,10 +1,23 @@
+import sys
+from pathlib import Path
+
+# Add project root to Python path
+sys.path.append(
+    str(Path(__file__).resolve().parent.parent)
+)
+
 import streamlit as st
+from api_ingestion.refresh_manager import (
+    refresh_live_data_if_needed
+)
 
 
 st.set_page_config(
     page_title="Financial Risk Monitoring Platform",
     layout="wide"
 )
+
+refresh_live_data_if_needed()
 
 st.title("Financial Risk Monitoring Platform")
 

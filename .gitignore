@@ -5,3 +5,5 @@ __pycache__/
 *.db
 *.sqlite3
 .devcontainer
+test_ai.py
+test_db.py
